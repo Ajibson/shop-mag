@@ -12,7 +12,7 @@
 <div class="container" id="steps">
     <div class="row ">
       {% for message in messages %}
-      <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+      <div class="alert alert-{{message.tags}} alert-dismissible fade show text-dark" role="alert">
         {{message}}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
       </div>
@@ -44,9 +44,9 @@
                     <strong class="fa-stack-1x text-success">2</strong>
                   </span>
                 <div class="card-body">
-                  <h5 class="card-title">See Trending Images</h5>
-                  <p class="card-text"> See trending images for you to join and make real cash</p>
-                  <button type="button" class="btn btn-success col-7">Trending Image</button>
+                  <h5 class="card-title">Customize Images</h5>
+                  <p class="card-text"> Customize your image as you want it 🥰🥰🥰</p>
+                  <a  href="#images" class="btn btn-success col-7">Customize Images</a>
                 </div>
               </div>
         </div>
@@ -76,16 +76,16 @@
             <form class="d-flex col-md-6 mb-4 ">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
+            </form >
             {% for image in images %}
             <div class="col-md-3 mb-4">
                 <a href="#"><img src="{{image.image.url}}" class="img-fluid" ></a>
                 <div class="row">
                 <h5 class="text-success mt-3 col-6">{{image.image_name}}</h5>
-                <h5 class="text-success mt-3 col-6 text-end">${{image.price}}</h5>
+                <h5 class="text-success mt-3 col-6 text-end">{% if image.price == 0 %} Free {% else %}#{{image.price}}{% endif %}</h5>
                 </div>
                 <div class="btn-group col-12" role="group" aria-label="Basic checkbox toggle button group">
-                    <input type="button" class="btn-check" >
+                    <input type="button" class="btn-check" id="images" >
                     <label class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ImageModal{{image.pk}}{{image.pk}}">Update</label>
                   
                     <input type="button" class="btn-check">

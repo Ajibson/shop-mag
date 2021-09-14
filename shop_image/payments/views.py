@@ -2,11 +2,41 @@ from django.shortcuts import render, redirect
 import uuid
 from .models import Payment
 from images.models import Image
+import requests
+import json
+
+
+def initialize_payment(request):
+    url = "https://api.paystack.co/transaction/initialize"
+    payload = json.dumps({
+        "email": "customer@email.com",
+        "amount": "500000",
+        "reference": uuid.uuid4().hex,
+        "metadata": {
+            "custom_fields": [
+                {
+                    "display_name": "Mobile Number",
+                    "variable_name": "mobile_number",
+                    "value": "+2348012345678"
+                }
+            ]
+        }
+    })
+    headers = {
+        'Authorization': 'Bearer sk_test_bccfb1827d1e81b18073ca06a5239f60ff16740b',
+        'Content-Type': 'application/json'
+    }
+    response = requests.request("POST", url, headers=headers, data=payload)
+    response_url = json.loads(response.text)
+    return redirect(response_url['data']["authorization_url"])
 
 
 def paymnent(request, pk):
 
-    email = request.user.email
+    if request.user.is_authenticated:
+        email = request.user.email
+    else:
+        email = "anonymous@mail.com"
     amount = Image.objects.filter(pk=pk).first().price
     reference_id = uuid.uuid4()
     image_meant_for = Image.objects.filter(pk=pk).first()
@@ -28,4 +58,4 @@ def confirm_payment(request, uidb64):
     image_meant_for = payment.image_for
     image_meant_for.number_of_download += 1
     image_meant_for.save()
-    return redirect("index")
+    return redirect("images:download_payment", image_meant_for.pk)

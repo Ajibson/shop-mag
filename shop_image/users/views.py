@@ -71,7 +71,7 @@ def message_admin(request):
             save_form.sender = request.user
             save_form.save()
             messages.success(request, "Message sent successfully")
-            return redirect("index")
+            return redirect("users:dashboard")
 
 
 @login_required()

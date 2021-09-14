@@ -7,6 +7,7 @@ from .views import index
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # path("paystack", include(('paystack.urls', 'paystack'), namespace='paystack')),
     path("users/", include("users.urls")),
     path("images/", include("images.urls")),
     path("payments/", include("payments.urls")),

@@ -79,17 +79,34 @@ def search(request):
     return render(request, 'index.html', context=context)
 
 
+def image(instance):
+    fl_path = instance.image
+    filename = f'{fl_path}'
+    mime_type, _ = mimetypes.guess_type(filename)
+    response = HttpResponse(fl_path, content_type=mime_type)
+    response['Content-Disposition'] = "attachment; filename=%s" % fl_path
+    instance.number_of_download += 1
+    instance.save()
+    return response
+
+
 def download_image(request, pk):
-    instance = Image.objects.filter(pk=pk).first()
-    if instance.price == 0:
-        fl_path = instance.image
-        filename = f'{fl_path}'
-        mime_type, _ = mimetypes.guess_type(filename)
-        response = HttpResponse(fl_path, content_type=mime_type)
-        response['Content-Disposition'] = "attachment; filename=%s" % fl_path
-        instance.number_of_download += 1
-        instance.save()
+    try:
+        instance = Image.objects.filter(pk=pk).first()
+        if instance.price == 0:
+            response = image(instance)
+            return response
+        else:
+            # redirect to payment page
+            return redirect("payments:payment", pk)
+    except Image.DoesNotExist:
+        return redirect('index')
+
+
+def download_image_payments(request, pk):
+    try:
+        instance = Image.objects.filter(pk=pk).first()
+        response = image(instance)
         return response
-    else:
-        # redirect to payment page
-        return redirect("payments:payment", pk)
+    except Image.DoesNotExist:
+        return redirect('index')
