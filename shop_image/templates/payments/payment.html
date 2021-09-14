@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paystack</title>
+</head>
+<body onload="payWithPaystack()">
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script>
+    window.onload=function(){
+    payWithPaystack();
+    };
+    function payWithPaystack(){
+    var handler = PaystackPop.setup({
+    key: '{{key}}',
+    email:'{{email}}',
+    amount:'{{amount}}',
+    currency: "NGN",
+    ref:'{{reference_number}}',
+    metadata: {
+    custom_fields: [
+    {
+    display_name:'{{email}}',
+    variable_name: "{{email}}",
+    value: "{{email}}"
+    },
+    {
+    display_name: "{{email}}",
+    variable_name: "{{email}}",
+    value: "{{email}}"
+    }
+    ]
+    },
+    callback: function(response){
+    //var url = #"";
+    //var id = response.reference;
+    location.href = "{% url 'payments:confirm_payment' reference_number %}"
+    },
+    onClose: function(){
+    alert('Transaction cancelled');
+    location.href = "/"
+    }
+    });
+    handler.openIframe();
+    }
+    </script>
+    </body>
+</html>

@@ -8,6 +8,7 @@ from django.db.models.query_utils import Q
 from images.models import Image, Category
 from images.forms import ImageForms
 import mimetypes
+from django.http import HttpResponse
 
 
 def upload(request):
@@ -80,11 +81,15 @@ def search(request):
 
 def download_image(request, pk):
     instance = Image.objects.filter(pk=pk).first()
-    fl_path = instance.image
-    filename = ‘downloaded_file_name.extension’
-
-    fl = open(fl_path, 'r’)
-    mime_type, _ = mimetypes.guess_type(fl_path)
-    response = HttpResponse(fl, content_type=mime_type)
-    response['Content-Disposition'] = "attachment; filename=%s" % filename
-    return response
+    if instance.price == 0:
+        fl_path = instance.image
+        filename = f'{fl_path}'
+        mime_type, _ = mimetypes.guess_type(filename)
+        response = HttpResponse(fl_path, content_type=mime_type)
+        response['Content-Disposition'] = "attachment; filename=%s" % fl_path
+        instance.number_of_download += 1
+        instance.save()
+        return response
+    else:
+        # redirect to payment page
+        return redirect("payments:payment", pk)

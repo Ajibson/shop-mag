@@ -21,6 +21,8 @@ class Image(models.Model):
     image_category = models.ForeignKey(
         Category, on_delete=models.CASCADE, blank=True, null=True)
     price = models.IntegerField(default=0)
+    amount_made = models.IntegerField(default=0)
+    number_of_download = models.IntegerField(default=0)
     description = models.TextField(blank=True, null=True)
     date_created = models.DateTimeField(default=timezone.now, blank=True)
 
