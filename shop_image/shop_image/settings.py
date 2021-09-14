@@ -1,4 +1,4 @@
-import django_heroku
+# import django_heroku
 from pathlib import Path
 import os
 import dj_database_url
@@ -135,7 +135,7 @@ MEDIA_ROOT = 'media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
