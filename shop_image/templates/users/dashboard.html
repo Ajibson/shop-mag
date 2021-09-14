@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top:50px;background-color:rgb(228, 223, 213)">
+
+</div>
+
+<section class="bg-success py-5 mb-5">
+    
+<div class="container" id="steps">
+    <div class="row ">
+      {% for message in messages %}
+      <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+        
+      {% endfor %}
+        <h2 class="text-white mb-4">Make money from your image by</h2>
+      
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- <img src="{% static 'img/2.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">1</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">Upload Image</h5>
+                  <p class="card-text"> Upload  that beautiful attractive image people will be ready to pay for</p>
+                  <button type="button" class="btn btn-success col-6" data-bs-toggle="modal" data-bs-target="#ImageModalUpload">Upload Image</button>
+                </div>
+              </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- <img src="{% static 'img/3.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">2</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">See Trending Images</h5>
+                  <p class="card-text"> See trending images for you to join and make real cash</p>
+                  <button type="button" class="btn btn-success col-7">Trending Image</button>
+                </div>
+              </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- <img src="{% static 'img/3.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">3</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">Message Admin</h5>
+                  <p class="card-text"> Do you have any complains to lodge to the admin? Drop message now!!!</p>
+                  <button type="button" class="btn btn-success col-7" data-bs-toggle="modal" data-bs-target="#MessageModal">Message Admin</button>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row">
+            <h2 class="text-success mb-4 col-md-6">Your Images</h2>
+            <form class="d-flex col-md-6 mb-4 ">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            {% for image in images %}
+            <div class="col-md-3 mb-4">
+                <a href="#"><img src="{{image.image.url}}" class="img-fluid" ></a>
+                <div class="row">
+                <h5 class="text-success mt-3 col-6">{{image.image_name}}</h5>
+                <h5 class="text-success mt-3 col-6 text-end">${{image.price}}</h5>
+                </div>
+                <div class="btn-group col-12" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="button" class="btn-check" >
+                    <label class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ImageModal{{image.pk}}{{image.pk}}">Update</label>
+                  
+                    <input type="button" class="btn-check">
+                    <label class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{image.pk}}">Delete</label>
+                  </div>
+                
+            </div>
+             <!-- Modal -->
+            <div class="modal fade" id="deleteModal{{image.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Delete Confirmation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <h4>Are you sure you want to delete image</h4>
+                    </div>
+                  </div>
+                
+                    {% csrf_token %}
+                  <div class="modal-footer text-white">
+                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
+                    <a href="{% url 'images:delete' image.pk %}"><button type="submit" class="btn btn-danger" >Delete Image</button></a>
+                  </div>
+                <!-- </form> -->
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Modal -->
+              <div class="modal fade" id="ImageModal{{image.pk}}{{image.pk}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Upload Image</h5>
+                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="POST" action="{% url 'images:update' image.pk %}" enctype="multipart/form-data">
+                      {% csrf_token %}
+                    <div class="modal-body">
+                      {% for error in form.errors %}
+                        {{error}}
+                      {% endfor %}
+
+                      
+                        <div class="form-group mb-4">
+                            <label for="image" class="form-label">image</label>
+                            <label for="image" class="form-label">{{image.image.url}}</label>
+                            <input type="file" class="form-control"  name = "image">
+                        </div>
+
+                        <div class="form-group mb-4">
+                          <label for="image" class="form-label">image Name</label>
+                          <input type="text" class="form-control"  value="{{image.image_name}}" name = "image_name">
+                        </div>
+
+                        <div class="form-group mb-4">
+                          <label for="image" class="form-label">image Category</label>
+                          <select class="form-control" name = "image_category">
+                            {% for category in categories %}
+                              <option value="{{category.pk}}" 
+                              {% if image.image_category == category %} selected {% endif %}>{{category}}</option>
+                            {% endfor %}
+                          </select>
+                        </div>
+
+                        <div class="form-group mb-4">
+                          <label for="image" class="form-label">Price</label>
+                          <input type="number" class="form-control"  value="{{image.price}}" name="price">
+                        </div>
+
+                        <div class="form-group mb-4">
+                          <label for="image" class="form-label">Description</label>
+                          <textarea class="form-control" name ="description">{{image.description}}</textarea>
+                        </div>
+
+                      
+                    </div>
+                    <div class="modal-footer text-white">
+                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn text-white" style="background-color: teal;">Update Image</button>
+                    </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+            {% endfor %}
+           
+           
+           
+        </div>
+
+         
+    </div>
+</section>
+
+
+  
+  
+
+  
+
+  
+
+
+  <div class="modal fade" id="ImageModalUpload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Upload Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{% url 'images:upload'%}" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="modal-body">
+          {% for error in form.errors %}
+            {{error}}
+          {% endfor %}
+
+          {% for field in form %}
+            <div class="form-group mb-4">
+                <label for="image" class="form-label">{{field.label}}</label>
+                {{field}}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer text-white">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn text-white" style="background-color: teal;">Upload Image</button>
+        </div>
+        </form>
+       
+      </div>
+    </div>
+  </div>
+
+
+  <div class="modal fade" id="MessageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Message Admin</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form action="{% url 'users:message'%}" method="POST">
+          {% csrf_token %}
+        <div class="modal-body">
+           
+          <div class="form-group mt-4">
+            <label for="image" class="form-label">Message</label>
+            <textarea  cols="10" rows="5" class="form-control" name="message"></textarea>
+        </div>
+        </div>
+        <div class="modal-footer text-white">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn text-white" style="background-color: teal;">Upload Image</button>
+        </div>
+      </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

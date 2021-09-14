@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-fluid" style="margin-top:50px;background-color:rgb(228, 223, 213)">
+    <div class="row pt-md-4 ms-3 ms-md-5">
+      {% for message in messages %}
+        <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+          
+        {% endfor %}
+        <div class="col-md-6 ">
+            <h1 class = "ps-0" style="margin-top:150px; color:teal"><strong> Monetize your image
+            </strong>
+            </h1>
+            <h1 class = "mt-4" style="color:teal"><strong> In three steps
+            </strong>
+            </h1>
+
+            <div class="row mt-5 mb-5">
+                <a href="#steps" class="text-white col-4 col-md-5 btn btn-md btn-success  " style="text-decoration: none;"> Learn How</a>
+                <button type="button" class="btn btn-success offset-1 col-5 col-md-5" 
+                data-bs-toggle="modal" data-bs-target="#ImageModal" >
+                Upload Image
+                </button>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="row text-center">
+            <img src="{% static 'img/hero.png'%}" alt="image" class="img-fluid col-8 ms-4 ms-md-0 col-md-12 col-lg-9" >
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="bg-success py-5 mb-5">
+    
+<div class="container" id="steps">
+    <div class="row ">
+      
+        
+       
+        <h2 class="text-white mb-4">Make money from your image by</h2>
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 ">
+                <!-- <img src="{% static 'img/1.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">1</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">Create an account</h5>
+                  <p class="card-text"> Register as a user to be able to upload an image  and track your money</p>
+                  <a href="{% url 'users:signup'%}"><button type="button" class="btn btn-success col-6 col-md-12 col-lg-6">Create Account</button></a>
+                </div>
+              </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- <img src="{% static 'img/2.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">2</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">Upload Image</h5>
+                  <p class="card-text"> Upload  that beautiful attractive image people will be ready to pay for</p>
+                  <button type="button" class="btn btn-success col-6 col-md-12 col-lg-6" data-bs-toggle="modal" data-bs-target="#ImageModal">Upload Image</button>
+                </div>
+              </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <!-- <img src="{% static 'img/3.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
+                <span class="fa-stack fa-3x">
+                    <i class="fa fa-circle fa-stack-2x"></i>
+                    <strong class="fa-stack-1x text-success">3</strong>
+                  </span>
+                <div class="card-body">
+                  <h5 class="card-title">Monetize your image</h5>
+                  <p class="card-text"> Customize your image by setting the price you want to sell your image</p>
+                  <a href="{% url 'users:dashboard'%}"><button type="button" class="btn btn-success col-7 col-md-12 col-lg-6">Customize Image</button></a>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="row">
+            <h2 class="text-success mb-4 col-md-6">Available Images</h2>
+            <form class="d-flex  col-md-6 mb-4 " action="{% url 'images:search' %}" method="GET">
+              <input class="form-control me-2" type="search" placeholder="Search Images by name or categories or price" aria-label="Search" name="search_value">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            {% for image in images %}
+            <div class="col-md-3 mb-4">
+                <a href="#"><img src="{{image.image.url}}" class="img-fluid" ></a>
+                <div class="row">
+                <h5 class="text-success mt-3 col-6">{{image.image_name}}</h5>
+                <h5 class="text-success mt-3 col-6 text-end">${{image.price}}</h5>
+                </div>
+            </div>
+            {% endfor %}
+          
+            
+        </div>
+    </div>
+</section>
+
+
+  
+  <!-- Modal -->
+  {% if user.is_authenticated %}
+  <div class="modal fade" id="ImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Upload Image</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form method="POST" action="{% url 'images:upload'%}" enctype="multipart/form-data">
+          {% csrf_token %}
+        <div class="modal-body">
+          {% for error in form.errors %}
+            {{error}}
+          {% endfor %}
+
+          {% for field in form %}
+            <div class="form-group mb-4">
+                <label for="image" class="form-label">{{field.label}}</label>
+                {{field}}
+            </div>
+          {% endfor %}
+        </div>
+        <div class="modal-footer text-white">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn text-white" style="background-color: teal;">Upload Image</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% else %}
+<div class="modal fade" id="ImageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel" style="color: teal;">Upload Image</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+         
+      <p><strong>Please login first</strong></p>
+       
+      </div>
+      <div class="modal-footer text-white">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+        <a href="{% url 'users:login'%}"><button type="button" class="btn text-white" style="background-color: teal;">Login</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+  <script>
+     errorElements = document.getElementsByClassName('alert-error');
+    [...errorElements].forEach(el=>{el.classList.add('alert-danger')})
+  </script>
+{% endblock %}
