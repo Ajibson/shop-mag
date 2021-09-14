@@ -32,7 +32,7 @@ def signup(request):
             save_form.set_password(form.cleaned_data['password'])
             save_form.save()
             messages.success(request, "Registration completed successfully")
-            # login(request, save_form)
+            login(request, save_form)
             return redirect('index')
         else:
             return render(request, 'users/signup.html', {'form': form})
