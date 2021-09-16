@@ -2,7 +2,7 @@ from django.urls import path
 
 # Import the views
 from .views import (upload, delete, update, search,
-                    download_image, download_image_payments)
+                    download_image, download_image_payments, qrcodesave)
 
 
 app_name = "images"
@@ -14,5 +14,6 @@ urlpatterns = [
     path("search/", search, name="search"),
     path('download/<int:pk>/', download_image, name="download_image"),
     path("download/payments/<int:pk>/",
-         download_image_payments, name="download_payment")
+         download_image_payments, name="download_payment"),
+    path("d/", qrcodesave)
 ]

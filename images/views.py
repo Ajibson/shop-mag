@@ -9,6 +9,7 @@ from images.models import Image, Category
 from images.forms import ImageForms
 import mimetypes
 from django.http import HttpResponse
+from urllib.request import urlopen
 
 
 def upload(request):
@@ -83,11 +84,11 @@ def download_image(request, pk):
     try:
         instance = Image.objects.filter(pk=pk).first()
         if instance.price == 0:
-            fl_path = instance.image
-            filename = f'{fl_path}'
-            mime_type, _ = mimetypes.guess_type(filename)
-            response = HttpResponse(fl_path, content_type=mime_type)
-            response['Content-Disposition'] = "attachment; filename=%s" % fl_path
+            url = instance.image
+            opener = urlopen(url)
+            mimetype = "application/octet-stream"
+            response = HttpResponse(opener.read(), content_type=mimetype)
+            response["Content-Disposition"] = "attachment; filename=aktel.png"
             instance.number_of_download += 1
             instance.save()
             return response
@@ -96,6 +97,16 @@ def download_image(request, pk):
             return redirect("payments:payment", pk)
     except Image.DoesNotExist:
         return redirect('index')
+
+
+def qrcodesave(request):
+
+    url = "https://res.cloudinary.com/hnmt9mth7/image/upload/v1/media/images/Screenshot_20210905-193745_1_xit21g"
+    opener = urlopen(url)
+    mimetype = "application/octet-stream"
+    response = HttpResponse(opener.read(), content_type=mimetype)
+    response["Content-Disposition"] = "attachment; filename=aktel.png"
+    return response
 
 
 def download_image_payments(request, pk):
