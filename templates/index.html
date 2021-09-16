@@ -103,15 +103,15 @@
             </form>
             {% for image in images %}
             <div class="col-md-3 mb-4">
-                <a href="#"><img src="{{image.image.url}}" class="img-fluid" ></a>
+                <a href="#"><img src="{{image.image.url}}" class="img-fluid" alt="{{image.image_name}}"></a>
                 <div class="row">
                 <h5 class="text-success mt-3 col-9">{{image.image_name}}</h5>
                 <h5 class="text-success mt-3 col-3 text-end">{% if image.price == 0 %} Free {% else %}#{{image.price}}{% endif %}</h5>
                 <div class="btn-group col-12" role="group" aria-label="Basic checkbox toggle button group">
                   <input type="button" class="btn-check" >
                   
-                   <button  class="btn btn-success col-md-6 " >
-                    <a href="{% url 'images:download_image' image.pk %}" class="text-white"  style="text-decoration: none;"> Download </a></button>
+                   
+                    <a href="{% url 'images:download_image' image.pk %}" class="btn btn-success col-md-6 text-white"  style="text-decoration: none;"> Download </a>
                   
                   <input type="button" class="btn-check">
                   <a href="#" class="btn btn-danger col-md-6" >Report Image</a>
