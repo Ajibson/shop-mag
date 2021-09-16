@@ -84,11 +84,11 @@ def download_image(request, pk):
     try:
         instance = Image.objects.filter(pk=pk).first()
         if instance.price == 0:
-            url = instance.image
+            url = instance.image.url
             opener = urlopen(url)
             mimetype = "application/octet-stream"
             response = HttpResponse(opener.read(), content_type=mimetype)
-            response["Content-Disposition"] = "attachment; filename=aktel.png"
+            response["Content-Disposition"] = f"attachment; filename={instance.image_name}"
             instance.number_of_download += 1
             instance.save()
             return response
