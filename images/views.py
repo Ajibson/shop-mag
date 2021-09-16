@@ -84,10 +84,10 @@ def download_image(request, pk):
     try:
         instance = Image.objects.filter(pk=pk).first()
         if instance.price == 0:
-            url = instance.image.url
+            url = str(instance.image.url)
             opener = urlopen(url)
             mimetype = "application/octet-stream"
-            response = HttpResponse(opener.read(), content_type=mimetype)
+            response = HttpResponse(opener.read(), content_type="image/png")
             response["Content-Disposition"] = f"attachment; filename={instance.image_name}"
             instance.number_of_download += 1
             instance.save()
