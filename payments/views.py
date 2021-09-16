@@ -1,9 +1,11 @@
 from django.shortcuts import render, redirect
 import uuid
 from .models import Payment
-from images.models import Image
+from images.models import Image, Category
+from images.forms import ImageForms
 import requests
 import json
+import os
 
 
 def initialize_payment(request):
@@ -45,10 +47,15 @@ def paymnent(request, pk):
     image_payment.save()
     # charge = (0.018 * float(amount)) + float(amount)
     amount = int(amount * 100)  # convert the money to kobo
-    # os.environ.get("key")
-    key = "pk_test_ecfda66835b5d8dd6f50342b4f6531f3e9efdc69"
+    key = os.environ.get("key")
+
+    categories = Category.objects.all()
+    form = ImageForms()
+    images = Image.objects.all()
+
     context = {
         "email": email,  'amount': amount, 'key': key, 'reference_number': reference_id,
+        "categories": categories, 'form': form, 'images': images
     }
     return render(request, 'payments/payment.html', context=context)
 
