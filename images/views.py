@@ -86,7 +86,6 @@ def download_image(request, pk):
         if instance.price == 0:
             url = str(instance.image.url)
             opener = urlopen(url)
-            mimetype = "application/octet-stream"
             response = HttpResponse(opener.read(), content_type="image/png")
             response["Content-Disposition"] = f"attachment; filename={instance.image_name}"
             instance.number_of_download += 1
@@ -99,24 +98,13 @@ def download_image(request, pk):
         return redirect('index')
 
 
-def qrcodesave(request):
-
-    url = "https://res.cloudinary.com/hnmt9mth7/image/upload/v1/media/images/Screenshot_20210905-193745_1_xit21g"
-    opener = urlopen(url)
-    mimetype = "application/octet-stream"
-    response = HttpResponse(opener.read(), content_type=mimetype)
-    response["Content-Disposition"] = "attachment; filename=aktel.png"
-    return response
-
-
 def download_image_payments(request, pk):
     try:
         instance = Image.objects.filter(pk=pk).first()
-        fl_path = instance.image
-        filename = f'{fl_path}'
-        mime_type, _ = mimetypes.guess_type(filename)
-        response = HttpResponse(fl_path, content_type=mime_type)
-        response['Content-Disposition'] = "attachment; filename=%s" % fl_path
+        url = str(instance.image.url)
+        opener = urlopen(url)
+        response = HttpResponse(opener.read(), content_type="image/png")
+        response["Content-Disposition"] = f"attachment; filename={instance.image_name}"
         instance.number_of_download += 1
         instance.save()
         return response
