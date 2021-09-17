@@ -69,14 +69,12 @@ def search(request):
             image_category__name__icontains=word) | Q(price__contains=word)
     images = Image.objects.filter(query).distinct()
 
-    if not images:
-        images = Image.objects.all()
-
     categories = Category.objects.all()
     form = ImageForms()
     context = {
-        "categories": categories, 'form': form, 'images': images
+        "categories": categories, 'form': form, 'images': images, "search_word": request.GET['search_value']
     }
+   
     return render(request, 'index.html', context=context)
 
 

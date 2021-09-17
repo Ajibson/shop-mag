@@ -1,5 +1,5 @@
 from django.test import TestCase
-from ..models import User, passwordresetcode
+from users.models import User, passwordresetcode
 
 
 """ The tests here are to ensure the right flow of models creation in the database """

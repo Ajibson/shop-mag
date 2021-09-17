@@ -72,11 +72,8 @@
 <section class="pb-5">
     <div class="container">
         <div class="row">
-            <h2 class="text-success mb-4 col-md-6">Your Images</h2>
-            <form class="d-flex col-md-6 mb-4 ">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
-            </form >
+            <h2 class="text-success mb-4 text-center">Your Images</h2>
+            {% if images %}
             {% for image in images %}
             <div class="col-md-3 mb-4">
                 <a href="#"><img src="{{image.image.url}}" class="img-fluid" ></a>
@@ -161,10 +158,9 @@
                         </div>
 
                         <div class="form-group mb-4">
-                          <label for="image" class="form-label">Description</label>
-                          <textarea class="form-control" name ="description">{{image.description}}</textarea>
+                          <label for="image" class="form-label">Number of downloads</label>
+                          <input type="number" class="form-control"  value="{{image.number_of_download}}"  readonly>
                         </div>
-
                       
                     </div>
                     <div class="modal-footer text-white">
@@ -177,7 +173,13 @@
               </div>
               
             {% endfor %}
-           
+            {% else %}
+
+            <h4>Related image does not exist 💔, Have any to add? 
+              <a  href="#" class="" data-bs-toggle="modal" data-bs-target="#ImageModalUpload">Add Image</a>
+            </h4>
+
+            {% endif %}
            
            
         </div>

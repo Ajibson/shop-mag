@@ -1,9 +1,8 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from django.shortcuts import redirect
 
 from shop_image.views import index
-from ..views import signup, Login, Logout, dashboard, password_reset_request, password_reset_confirm
+from users.views import signup, Login, Logout, dashboard, password_reset_request, password_reset_confirm
 from django.contrib.auth import views as auth_views
 
 """ The tests here are to ensure thata the right views are being served for the url being seen for users app"""

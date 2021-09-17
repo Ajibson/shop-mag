@@ -1,8 +1,5 @@
 from django.test import TestCase, Client
-from ..models import User
-from django.shortcuts import render, redirect
-from django.urls import reverse, resolve
-from django.contrib.auth import views as auth_views
+from django.urls import reverse
 
 
 class ViewsTests(TestCase):

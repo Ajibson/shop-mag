@@ -45,25 +45,24 @@
         
        
         <h2 class="text-white mb-4">Make money from your image by</h2>
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 ">
-                <!-- <img src="{% static 'img/1.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
-                <span class="fa-stack fa-3x">
+        <div class="col-md-4 mb-4 text-center">
+             <div class="card h-100 ">
+                <span class="fa-stack fa-3x mx-auto">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <strong class="fa-stack-1x text-success">1</strong>
-                  </span>
+                </span>
                 <div class="card-body">
                   <h5 class="card-title">Create an account</h5>
                   <p class="card-text"> Register as a user to be able to upload an image  and track your money</p>
                   <a href="{% url 'users:signup'%}"><button type="button" class="btn btn-success col-6 col-md-12 col-lg-6">Create Account</button></a>
                 </div>
-              </div>
+             </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 text-center">
             <div class="card h-100">
                 <!-- <img src="{% static 'img/2.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
-                <span class="fa-stack fa-3x">
+                <span class="fa-stack fa-3x mx-auto">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <strong class="fa-stack-1x text-success">2</strong>
                   </span>
@@ -75,10 +74,10 @@
               </div>
         </div>
 
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4 text-center">
             <div class="card h-100">
                 <!-- <img src="{% static 'img/3.jpg' %}" class=" rounded-circle ms-2 col-2 mt-2" alt="how-to-1" > -->
-                <span class="fa-stack fa-3x">
+                <span class="fa-stack fa-3x mx-auto">
                     <i class="fa fa-circle fa-stack-2x"></i>
                     <strong class="fa-stack-1x text-success">3</strong>
                   </span>
@@ -98,13 +97,24 @@
         <div class="row">
             <h2 class="text-success mb-4 col-md-6">Available Images</h2>
             <form class="d-flex  col-md-6 mb-4 " action="{% url 'images:search' %}" method="GET">
-              <input class="form-control me-2" type="search" placeholder="Search Images by name or categories or price" aria-label="Search" name="search_value">
-              <button class="btn btn-outline-success" type="submit">Search</button>
+              <div class="input-group">
+                <input type="text" class="form-control" name="search_value" value="{{search_word}}" placeholder="Search Images by name or categories or price">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-success" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
             </form>
+            
+            
+              
+            {% if images %}
             {% for image in images %}
             <div class="col-md-3 mb-4">
-               
-                <a href="#"><img src="{{image.image.url}}" class="img-fluid" alt="{{image.image_name}}"></a>
+                <div style="width: 100%;">
+                <img src="{{image.image.url}}" class="img-fluid" alt="{{image.image_name}}" style="height: 100%; width: 100%">
+                </div>
                 <div class="row">
                 <h5 class="text-success mt-3 col-9">{{image.image_name}}</h5>
                 <h5 class="text-success mt-3 col-3 text-end">{% if image.price == 0 %} Free {% else %}#{{image.price}}{% endif %}</h5>
@@ -122,6 +132,13 @@
                 </div>
             </div>
             {% endfor %}
+            {% else %}
+
+            <h4>Related image does not exist 💔, Have any to add? 
+              <a  href="#" class="" data-bs-toggle="modal" data-bs-target="#ImageModal">Add Image</a>
+            </h4>
+
+            {% endif %}
           
             
         </div>

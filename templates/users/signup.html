@@ -4,11 +4,11 @@
 
 {% block css %}<link rel="stylesheet" href="{% static 'css/style.css'%}">{% endblock css%}
 {% block content %}
-<section id="sign-container" style="background-color:rgb(228, 223, 213)">
+<section id="sign-container" style="background-color:#1E9DA0">
     <div class="container" >
         <div class="row my-5 ">
             
-            <form action="" class="col-md-5 my-5 pb-4 mx-auto rounded bg-light" method="POST">
+            <form action="" class="col-md-5 my-5 pb-4 mx-auto rounded bg-light px-4" method="POST">
                 <div class="row ">
                 {% csrf_token %}
                 <h2 class="my-4" style="color: teal;">Create an account</h2>
@@ -26,7 +26,7 @@
                 </div>
                 
                 <div class="d-grid gap-2 my-4">
-                    <button class="btn btn-success" type="submit" style="background-color: teal;">Create Account</button>    
+                    <button class="btn btn-success rounded-pill" type="submit" style="background-color: teal;">Create Account</button>    
                 </div>
                 <a href="{% url 'users:login'%}" class="text-start text-success" style="text-decoration: none;" >New User? Login</a>
             </form>
