@@ -8,3 +8,7 @@ The application has the following functionalities
 2. Users can views and download uploaded images as a .png format 
 3. Users can search for images using the image name, category of price tag
 3. Paystack payment gateway has been attached for payment of images which are not free
+
+
+### Link to tests written
+https://github.com/Ajibson/shop-mag/tree/main/tests
